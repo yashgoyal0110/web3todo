@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useState } from 'react';
+import Wallet from './pages/Wallet.jsx';
+import ViewTask from './pages/ViewTask.jsx';
+import ViewAllTask from './pages/ViewAllTask.jsx';
+import DeleteTask from './pages/DeleteTask.jsx';
+import CreateTask from './pages/CreateTask.jsx';
+import UpdateTask from './pages/UpdateTask.jsx';
+import Navigation from './pages/Navigation.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const[state, setState] = useState({
+    web3: null,
+    account: null,
+    contract: null,
+  });
+
+  const saveState  = ({web3, account, contract}) => {
+    setState({web3: web3, account: account, contract: contract});
+  }
+
+  const router = createBrowserRouter([
+    { path: '/', element: <Wallet saveState={saveState}/> },
+    { path: '/view-task', element: <ViewTask /> },
+    { path: '/view-all', element: <ViewAllTask /> },
+    { path: '/delete-task', element: <DeleteTask state={state}/> },
+    { path: '/create-task', element: <CreateTask state={state}/> },
+    { path: '/update-task', element: <UpdateTask state={state}/> },
+  ]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+  <RouterProvider router={router} />
+  
   )
 }
 
-export default App
+export default App;
